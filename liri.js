@@ -58,43 +58,69 @@ var title = "";
 for (var i = 3; i< song.length; i++){
 	title = title + " " + song[i];
 }
+if (title){
 spotify.search({ type: 'track', query: title }, function(err, data) {
     if ( err ) {
         console.log('Error occurred: ' + err);
         return;
-    };    
-    if (title === ""){
-    	console.log('Artist :Ace of Base');
-    	console.log('Preview Link :https://p.scdn.co/mp3-preview/4c463359f67dd3546db7294d236dd0ae9918 ');
-    	console.log('Name:The Sign ');
-    	console.log('Album:The Sign (US Album [Remastered]');
-    } else {
-    for (var i = 0; i < data.tracks.items.length; i++){
-    var get = data.tracks.items[i];
-    // console.log(JSON.stringify(data, null, 2));
-    for (var a = 0; a < data.tracks.items[i].artists.length ; a++){
-    console.log('Artist :' + get.artists[a].name);
-}
-    console.log('Preview Link :' + get.preview_url);
-    console.log('Name :' + get.name);
-    console.log('Album :' + data.tracks.items[i].album.name)
+};    
+    console.log('Artist: ' + data.tracks.items[0].artists[0].name);
+    console.log('Preview Link :' + data.tracks.items[0].preview_url);
+    console.log('Song Name :' + data.tracks.items[0].name);
+    console.log('Album :' + data.tracks.items[0].album.name)
     console.log ("<-------------------------------->");
-}
-}
-})
+    })
+
+}else{
+    spotify.search({ type: 'track', query: 'The Sign'}, function (err,data){
+        console.log("No input, let's go with Ace of Base");
+        console.log('Artist: ' + data.tracks.items[4].artists[0].name);
+        console.log('Preview Link: ' + data.tracks.items[4].preview_url);
+        console.log('Song Name: ' + data.tracks.items[4].name);
+        console.log('Album :' + data.tracks.items[4].album.name);
+        })
+    }
 }
 
 function getMovie(){
 var movie = process.argv;
 var title = movie.slice(3).join("+");
 // console.log(title);
-request('http://www.omdbapi.com/?t=' + title + '&y=&plot=short&r=json', function (error, response, body) {
+if (title){
+request('http://www.omdbapi.com/?t=' + title + '&y=&plot=short&r=json&tomatoes=true', function (error, response, body) {
   if (!error && response.statusCode == 200) {
+    // console.log(body);
     console.log('Title: ' + JSON.parse(body).Title);
-  }
-})
+    console.log('Year: ' + JSON.parse(body).Year);
+    console.log('IMDB rating: ' + JSON.parse(body).imdbRating);
+    console.log('Country: ' + JSON.parse(body).Country);
+    console.log('Language: ' + JSON.parse(body).Language);
+    console.log('Plot: ' + JSON.parse(body).Plot);
+    console.log('Actors: ' + JSON.parse(body).Actors);
+    console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).tomatoUserRating);
+    console.log('Rotten Tomatoes URL: ' + JSON.parse(body).tomatoURL);
+            }
+        })
+    }else{
+        console.log("No input, let's go with Mr. Nobody");
+request('http://www.omdbapi.com/?t=Mr.Nobody&y=&plot=short&r=json&tomatoes=true', function (error, response, body) {
+    if (!error && response.statusCode == 200){
+    console.log('Title: ' + JSON.parse(body).Title);
+    console.log('Year: ' + JSON.parse(body).Year);
+    console.log('IMDB rating: ' + JSON.parse(body).imdbRating);
+    console.log('Country: ' + JSON.parse(body).Country);
+    console.log('Language: ' + JSON.parse(body).Language);
+    console.log('Plot: ' + JSON.parse(body).Plot);
+    console.log('Actors: ' + JSON.parse(body).Actors);
+    console.log('Rotten Tomatoes Rating: ' + JSON.parse(body).tomatoUserRating);
+    console.log('Rotten Tomatoes URL: ' + JSON.parse(body).tomatoURL);
+            }
+        })
+    }
 }
-
 function doWhatItSays(){
 
 }
+
+
+
