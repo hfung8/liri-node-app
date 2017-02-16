@@ -3,6 +3,7 @@ var Twitter = require('twitter');
 var keys = require('./keys.js');
 var spotify = require('spotify');
 var request = require('request');
+var fs = require('fs');
 
 //Setup variable
 var tweets = process.argv[2];
@@ -67,8 +68,7 @@ spotify.search({ type: 'track', query: title }, function(err, data) {
     console.log('Artist: ' + data.tracks.items[0].artists[0].name);
     console.log('Preview Link :' + data.tracks.items[0].preview_url);
     console.log('Song Name :' + data.tracks.items[0].name);
-    console.log('Album :' + data.tracks.items[0].album.name)
-    console.log ("<-------------------------------->");
+    console.log('Album :' + data.tracks.items[0].album.name);
     })
 
 }else{
@@ -118,8 +118,27 @@ request('http://www.omdbapi.com/?t=Mr.Nobody&y=&plot=short&r=json&tomatoes=true'
         })
     }
 }
+
 function doWhatItSays(){
 
+fs.readFile("random.txt", "utf8", function(err,data) {
+    if (err) throw err;
+    var dataArray = data.split(",");
+    var songFromFile = dataArray[1];
+
+    spotify.search({ type: 'track', query: songFromFile}, function (err,data){
+    console.log('Artist: ' + data.tracks.items[0].artists[0].name);
+    console.log('Preview Link :' + data.tracks.items[0].preview_url);
+    console.log('Song Name :' + data.tracks.items[0].name);
+    console.log('Album :' + data.tracks.items[0].album.name);
+        
+            if ( err ) {
+            console.log('Error occurred: ' + err);
+            console.log("");
+            return;
+            }
+        })
+    })
 }
 
 
