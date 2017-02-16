@@ -8,6 +8,7 @@ var request = require('request');
 var tweets = process.argv[2];
 var spotifysong = process.argv[2];
 var movie = process.argv[2];
+var whatItSays = process.argv[2];
 
 
 //Get twitterkeys from key.js 
@@ -33,6 +34,9 @@ if (spotifysong === 'spotify-this-song'){
 if (movie === 'movie-this'){
 	getMovie();
 };
+if (whatItSays === 'do-what-it-says'){
+	doWhatItSays();
+}
 
 //Functions
 function getTweets(){	
@@ -82,14 +86,15 @@ spotify.search({ type: 'track', query: title }, function(err, data) {
 
 function getMovie(){
 var movie = process.argv;
-var title = "";
-for (var i = 3; i< movie.length; i++){
-	title = title + " " + movie[i];
-}
-console.log(title);
+var title = movie.slice(3).join("+");
+// console.log(title);
 request('http://www.omdbapi.com/?t=' + title + '&y=&plot=short&r=json', function (error, response, body) {
   if (!error && response.statusCode == 200) {
-    console.log(body) // Show the HTML for the Google homepage. 
+    console.log('Title: ' + JSON.parse(body).Title);
   }
 })
+}
+
+function doWhatItSays(){
+
 }
